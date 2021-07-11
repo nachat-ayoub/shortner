@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<%- include('heade') -%>
+
+<body>
+
+<center class="mt-5">
+  <h2>JavaScript While Loop</h2>
+    <p id="timer" style="font-size:5rem; ">5</p>
+    <button class="btn btn-success disabled"> wait... </button>
+</center>
+
+
+<%- include('footer') -%>
+<%- include('bootstrap_scripts') -%>
+
+    <script> 
+      let timer = document.querySelector("#timer");
+      let btn = document.querySelector("button");
+      let time = 5;
+
+      function getCookie(name) {
+        var cookieArr = document.cookie.split(";");
+        for(var i = 0; i < cookieArr.length; i++) {
+          var cookiePair = cookieArr[i].split("=");
+          if(name == cookiePair[0].trim()) {
+              return decodeURIComponent(cookiePair[1]);
+          }
+        }
+        return null;
+      }
+
+
+
+
+      //10 let i = parseInt(timer.innerText)
+
+      setInterval(function(){
+        time--;
+        if(time >= 0){
+          timer.innerHTML = time;
+        }
+        if (time == 0) {
+          console.log(getCookie("linkSlug"))
+          btn.innerHTML = "Get Link";
+          btn.classList.remove("disabled")
+            const redirectMe = () => {
+              document.cookie = "isPassed=true";
+              document.cookie = "isPassed=true";
+              window.location.href = "/"+getCookie("linkSlug");
+            }
+          btn.addEventListener("click", redirectMe)
+        }
+      }, 1000);
+
+    </script>
+</body>
+</html>
