@@ -10,8 +10,9 @@ const app = express();
 
 // Middlewares
 app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static('public'));
+app.use(bodyParser.json());
 app.use(cookieParser());
 
 
@@ -58,23 +59,25 @@ app.post('/short', async (req, res) => {
 app.get('/:slug', async (req, res) => {
 	try {
 		const url = await Url.findOne({ slug : req.params.slug })
-		res.cookie('linkSlug', url.slug);
-		const token = req.cookies.isPassed
-		if (token) {
-			if (token == "true") {
-				if (url == null) {
-					res.sendStatus(404)
-				}
-				url.clicks++
-				url.save()
-				res.cookie('isPassed', '', { maxAge: 1 });
-				res.cookie('linkSlug', ' ', { maxAge: 1 });
+		if (url == null) {
+			res.sendStatus(404)
+		} else {
+			res.cookie('linkSlug', url.slug);
+			const token = req.cookies.isPassed;
+			if (token) {
+				if (token == "true") {
+					url.clicks++
+					url.save()
+					res.cookie('isPassed', '', { maxAge: 1 });
+					res.cookie('linkSlug', ' ', { maxAge: 1 });
 
-				res.redirect(url.full_url)
-			} else {
-				res.redirect(`/test`)
-			}
-		} else {res.redirect(`/test`)}
+					res.redirect(url.full_url)
+				} else {
+					res.redirect(`/test`)
+				}
+			}else {res.redirect(`/test`)}
+		}
+
 
 			
 	} catch(err) { console.log(err) }

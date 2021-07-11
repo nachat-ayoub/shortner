@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('heade') -%>
-
 <body>
 
 <div class="container ">
-<h2 class="mt-3 mb-5 text-center">Url Shortner | made by Nachat Ayoub</h2>
+<h2 class="mt-3 mb-5 text-center">Shoorty | Url Shortner</h2>
 
 
 <div class="">
@@ -24,6 +23,7 @@
 	  <thead class="thead-dark table-bordered">
 	    <tr>
 	      <th scope="col">Full url</th>
+	      <th scope="col">Short url</th>
 	      <th scope="col">Slug</th>
 	      <th scope="col">Clicks</th>
 	    </tr>
@@ -32,6 +32,7 @@
 	  	<% results.forEach(result => { %>
 		    <tr >
 		      <td><a href="<%= result.full_url %>"><%= result.full_url %></a></td>
+		      <td><a id="shortUrl" href="/<%= result.slug %>"><%= result.slug %></a></td>
 		      <td><a href="/<%= result.slug %>"><%= result.slug %></a></td>
 		      <td><%= result.clicks %></td>
 		    </tr>
@@ -42,13 +43,33 @@
 
 </div>
 
-
-
-
 </div>
 
 
 <%- include('footer') -%>
 <%- include('bootstrap_scripts') -%>
+<script type="text/javascript">
+	const domain = window.location.hostname;
+	let arr;
+	const GetPort = () => {
+		arr = window.location.href.split("/");
+		return arr[0]+"//"+arr[2]+"/"
+	}
+
+	const getTheShortUrl = () => {
+		if (domain == "localhost") {
+			GetPort()
+			let baseURL = `${GetPort()}`;
+			return baseURL;
+		} else {
+			let baseURL = `http://${domain}/`;
+			return baseURL;
+		}
+	}
+
+
+	let shortUrl = document.querySelectorAll('#shortUrl')
+	shortUrl.forEach(e => e.innerText = getTheShortUrl()+e.innerText)
+</script>
 </body>
 </html>
