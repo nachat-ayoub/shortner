@@ -70,8 +70,11 @@ app.get('/:slug', async (req, res) => {
 					url.save()
 					res.cookie('isPassed', '', { maxAge: 1 });
 					res.cookie('linkSlug', ' ', { maxAge: 1 });
-
-					res.redirect(url.full_url)
+					if (url.full_url.includes("http")) {
+						res.redirect(url.full_url)
+					} else {
+						res.redirect(`http://${url.full_url}`)
+					}
 				} else {
 					res.redirect(`/test`)
 				}
